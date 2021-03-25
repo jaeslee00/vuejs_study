@@ -1,9 +1,11 @@
 <template>
   <div id="app">
       <TodoHeader></TodoHeader>
-      <TodoInput v-on:addTodoItem="addOneItem"></TodoInput>                        <!-- v-on:하위 컴포넌트로부터 올라온 이벤트 속성="현재 컴포넌트의 이벤트 핸들러" -->
-      <TodoList v-bind:propsdata="todoItems" v-on:removeItem="removeOneItem" v-on:toggleItem="toggleOneItem"></TodoList>   <!-- v-bind:하위 컴포넌트로 내릴 props 속성="현재 컴포넌트의 데이터 속성" -->
-      <TodoFooter v-on:removeAllItems="clearAll"></TodoFooter>
+      <TodoInput v-on:addTodoItem="addOneItem"></TodoInput>
+      <!-- v-on:하위 컴포넌트로부터 올라온 이벤트 속성="현재 컴포넌트의 이벤트 핸들러" -->
+      <TodoList v-bind:propsdata="todoItems" v-on:removeItem="removeOneItem" v-on:toggleItem="toggleOneItem"></TodoList>
+      <!-- v-bind:하위 컴포넌트로 내릴 props 속성="현재 컴포넌트의 데이터 속성" -->
+      <TodoFooter v-on:removeAllItems="clearAll" v-on:shuffleItems="shuffleList"></TodoFooter>
   </div>
 </template>
 
@@ -12,6 +14,7 @@ import TodoHeader from "./components/TodoHeader.vue"
 import TodoFooter from "./components/TodoFooter.vue"
 import TodoList from "./components/TodoList.vue"
 import TodoInput from "./components/TodoInput.vue"
+import _ from 'lodash';
 
 export default {
     components: {
@@ -42,6 +45,9 @@ export default {
         clearAll: function() {
             this.todoItems = [];
             localStorage.clear();
+        },
+        shuffleList: function() {
+            this.todoItems = _.shuffle(this.todoItems);
         }
     },
     created: function() {

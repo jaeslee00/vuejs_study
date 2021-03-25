@@ -1,6 +1,7 @@
 <template>
     <div>
         <button v-on:click="removeAll">Remove All</button>
+        <button v-on:click="shuffleTodo">Shuffle</button>
     </div>
 </template>
 
@@ -9,6 +10,9 @@ export default {
     methods: {
         removeAll: function() {
             this.$emit('removeAllItems');
+        },
+        shuffleTodo: function() {
+            this.$emit("shuffleItems")
         }
     }
 }
