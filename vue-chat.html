@@ -1,0 +1,105 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>웰케 어렵냐..</title>
+</head>
+<body>
+
+  <div id="app">
+
+    <app-chatroom v-bind:messages="messages"></app-chatroom>
+    <strong>메세지이이이이잉</strong>
+    <app-input v-on:inputevent="send"></app-input>
+    <button v-on:click="quit">
+        Quit
+    </button>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+<script>
+
+    const initMessage = `
+      <h1>Vue는 넘모 어려우....</h1>
+    `;
+
+    let appChatRoom = {
+      template:  `
+      <div id="chat-content" style="height:600px; width:800px; overflow:auto; border:8px solid burlywood; padding:2%">
+        <div v-for="m in messages">
+          <div style="margin-bottom: 10px">
+            <span style="display: inline-block; font-size: small">{{ m.time }}</span>
+            <span v-bind:style="{ color: m.color }">{{ m.name }}: </span>
+            <span v-html="m.message"></span>
+          </div>
+        </div>
+      </div>`,
+      props: ['messages']
+    }
+
+    let appInput = {
+      template: `
+      <div>
+        <input type="text" style="margin-bottom: 10px" placeholder="Enter your message..." v-model="message" v-on:keyup.enter.prevent="sendMessage">
+        <button :disabled="checkMsg" v-on:click.prevent="sendMessage">
+          send
+        </button>
+      </div>`,
+      data: function() {
+        return {
+          message: ""
+        }
+      },
+      methods: {
+        sendMessage: function () {
+          this.$emit('inputevent', this.message)
+          console.log("event !!!")
+          this.message = ""
+        }
+      },
+      computed: {
+        checkMsg() {
+          return !this.message;
+        }
+      }
+    }
+    
+    const date = new Date()
+
+    new Vue({
+        el: '#app',
+        data: {
+            name: '제스',
+            color: '#084433',
+            
+            messages: [
+                { name: '[뷰 스터디 헤헤..]', message: initMessage, time: date.toLocaleTimeString() },
+            ],
+        },
+        components: {
+          'app-chatroom': appChatRoom,
+          'app-input': appInput
+        },
+        methods: {
+          send: function(msg) {
+            if (msg.length > 0) {
+              this.messages.push({ name: this.name, message: msg, time: date.toLocaleTimeString(), color: this.color })
+              this.scrollBottom();
+            }
+          },
+          scrollBottom: function() {
+              Vue.nextTick(function () {
+                const div = document.getElementById("chat-content");
+                div.scrollTop = div.scrollHeight;
+            });
+          },
+          quit: function() {
+            alert("잠이 오니...? 더 해.. 빨리...")
+          }
+        }
+    });
+</script>
+
+</body>
+</html>
